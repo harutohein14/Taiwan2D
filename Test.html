@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K Online 2D Lottery - Results</title>
+    <style>
+    
+    body {
+      position: relative;
+      height: 100vh;
+      margin: 0;
+      background: #f0f8ff;
+    }
+
+   
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: #0a0e17;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Constellation Background */
+        .constellation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.1) 0.5px, transparent 1px),
+                radial-gradient(circle at 80% 40%, rgba(255,255,255,0.1) 0.5px, transparent 1px),
+                radial-gradient(circle at 30% 70%, rgba(255,255,255,0.1) 0.5px, transparent 1px),
+                radial-gradient(circle at 70% 70%, rgba(255,255,255,0.1) 0.5px, transparent 1px),
+                radial-gradient(circle at 50% 90%, rgba(255,255,255,0.1) 0.5px, transparent 1px);
+            background-size: 200px 200px;
+            animation: twinkle 4s infinite alternate;
+        }
+        
+        .constellation:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 60% 30%, rgba(255,255,255,0.05) 0.5px, transparent 1px),
+                radial-gradient(circle at 20% 60%, rgba(255,255,255,0.05) 0.5px, transparent 1px),
+                radial-gradient(circle at 90% 80%, rgba(255,255,255,0.05) 0.5px, transparent 1px);
+            background-size: 300px 300px;
+            animation: twinkle 5s infinite alternate-reverse;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+        
+        /* App Container */
+        .app-container {
+            width: 100%;
+            max-width: 380px;
+            background: rgba(12, 20, 36, 0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(64, 156, 255, 0.2);
+        }
+        
+        /* Header */
+        .app-header {
+            padding: 18px;
+            text-align: center;
+            background: rgba(9, 18, 36, 0.7);
+            border-bottom: 1px solid rgba(64, 156, 255, 0.2);
+            position: relative;
+        }
+        
+        .app-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(0, 114, 255, 0.3);
+            letter-spacing: 1px;
+            margin: 5px 0;
+        }
+        
+        .app-header:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00c6ff, #0072ff, transparent);
+        }
+        
+        /* Main Result Section */
+        .main-result {
+            padding: 15px;
+            text-align: center;
+            background: rgba(16, 30, 56, 0.6);
+            border-bottom: 1px solid rgba(64, 156, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-result-label {
+            font-size: 12px;
+            color: #8da9c4;
+            margin-bottom: 5px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        .main-result-time {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .main-result-number {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+            margin: 10px 0;
+            position: relative;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        
+        .main-result-number:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+        }
+        
+        /* Results Section */
+        .results-section {
+            padding: 15px;
+        }
+        
+        .result-row {
+            display: flex;
+            margin-bottom: 15px;
+            background: rgba(16, 30, 56, 0.6);
+            border-radius: 15px;
+            padding: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(64, 156, 255, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .result-row:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.2);
+            border-color: rgba(64, 156, 255, 0.3);
+        }
+        
+        .time-slot {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        .time-label {
+            font-size: 14px;
+            color: #8da9c4;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        
+        .number-display {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+            position: relative;
+        }
+        
+        .number-display:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+        }
+        
+        .divider {
+            width: 1px;
+            background: rgba(64, 156, 255, 0.2);
+            margin: 0 8px;
+        }
+        
+        /* Tabs Section - Improved */
+        .tabs-section {
+            background: rgba(9, 18, 36, 0.7);
+            padding: 15px;
+            border-top: 1px solid rgba(64, 156, 255, 0.2);
+            border-bottom: 1px solid rgba(64, 156, 255, 0.2);
+        }
+        
+        .tabs-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .tab {
+            text-align: center;
+            padding: 12px 8px;
+            background: rgba(16, 30, 56, 0.6);
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #a0c6ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(64, 156, 255, 0.1);
+            text-decoration: none;
+            display: block;
+        }
+        
+        .tab:hover, .tab.active {
+            background: linear-gradient(45deg, rgba(0, 114, 255, 0.3), rgba(0, 198, 255, 0.3));
+            color: #fff;
+            box-shadow: 0 0 15px rgba(0, 114, 255, 0.3);
+            border-color: rgba(64, 156, 255, 0.3);
+        }
+        
+        /* Buttons Section - Improved */
+        .buttons-section {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .app-button {
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .store-button {
+            background: linear-gradient(45deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(178, 31, 31, 0.3);
+        }
+        
+        .walk-button {
+            background: linear-gradient(45deg, #00b09b, #96c93d);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 176, 155, 0.3);
+        }
+        
+        .get-button {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            font-size: 17px;
+            padding: 16px;
+            box-shadow: 0 5px 20px rgba(255, 65, 108, 0.4);
+            margin-top: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+        
+        .get-button:after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(25deg);
+            transition: all 0.6s;
+        }
+        
+        .get-button:hover:after {
+            left: 140%;
+        }
+        
+        /* Animation for main result */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 420px) {
+            .app-header h1 {
+                font-size: 22px;
+            }
+            
+            .main-result-number {
+                font-size: 42px;
+            }
+            
+            .number-display {
+                font-size: 26px;
+            }
+            
+            .tab {
+                font-size: 13px;
+                padding: 10px 5px;
+            }
+        }
+        .main-result-number {
+    transition: transform 0.3s ease-in-out;
+}
+
+.pop-jump {
+    transform: scale(1.2); /* Makes it grow larger */
+    transition: transform 0.3s ease-in-out; /* Smooth transition */
+}
+    </style>
+</head>
+<body>
+    <!-- Constellation Background -->
+
+    <!-- App Container -->
+    <div class="app-container">
+        <!-- App Header -->
+        
+ 
+
+        <div class="app-header">
+          <span>    <div class="constellation"></div>
+     
+    
+            <h1>Taiwan 2D</h1>
+        </div>
+        
+        <!-- Main Result Section -->
+        <div class="main-result">
+            
+            <div class="main-result-time">Today, 9:00 PM</div>
+            <div class="main-result-number">00</div>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-section">
+            <div class="result-row">
+                <div class="time-slot">
+                    <div class="time-label">11:00 AM</div>
+                    <div class="number-display">81</div>
+                </div>
+                <div class="divider"></div>
+                <div class="time-slot">
+                    <div class="time-label">1:00 PM</div>
+                    <div class="number-display">90</div>
+                </div>
+            </div>
+            
+            <div class="result-row">
+                <div class="time-slot">
+                    <div class="time-label">3:00 PM</div>
+                    <div class="number-display">77</div>
+                </div>
+                <div class="divider"></div>
+                <div class="time-slot">
+                    <div class="time-label">5:00 PM</div>
+                    <div class="number-display">46</div>
+                </div>
+            </div>
+            
+            <div class="result-row">
+                <div class="time-slot">
+                    <div class="time-label">7:00 PM</div>
+                    <div class="number-display">86</div>
+                </div>
+                <div class="divider"></div>
+                <div class="time-slot">
+                    <div class="time-label">9:00 PM</div>
+                    <div class="number-display">70</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tabs Section - Improved -->
+        <div class="tabs-section">
+            <div class="tabs-container">
+                <a href="https://t.me/hein2425" class="tab active" target="_blank">
+                    Contact
+                </a>
+                <a href="History.html" class="tab" target="_blank">
+                    History
+                </a>
+      
+            </div>
+        </div>
+        
+
+    </div>
+    <script>
+      
+      // Function to animate the main result number with a stronger "pop jump"
+function animateResultNumber() {
+    if (isAnimating) return;
+
+    isAnimating = true;
+    let count = 0;
+    const animationDuration = 5000; // 5 seconds
+    const interval = 100; // Update every 100ms
+
+    animationInterval = setInterval(() => {
+        count += interval;
+        mainResultNumber.textContent = generateRandomNumber();
+
+        // Apply pop jump effect every 5 seconds
+        mainResultNumber.classList.add('pop-jump');
+        
+        // Remove pop-jump class after transition (0.3s for smooth effect)
+        setTimeout(() => {
+            mainResultNumber.classList.remove('pop-jump');
+        }, 300);
+
+        // After 5 seconds, stop the animation and freeze
+        if (count >= animationDuration) {
+            clearInterval(animationInterval);
+            isAnimating = false;
+        }
+    }, 5000); // Change the number every 5 seconds
+}
+      
+      
+    // Configuration - Developer can change these numbers if needed
+    const predefinedResults = {
+        '11:00 AM': 81,    // Developer can change this number
+        '1:00 PM': 90,     // Developer can change this number
+        '3:00 PM': 88,     // Developer can change this number
+        '5:00 PM': 98,    // Developer can change this number
+        '7:00 PM': 27,     // Developer can change this number
+        '9:00 PM': 50     // Developer can change this number
+    };
+
+    // Variables to track current state
+    let isAnimating = false;
+    let currentResult = null;
+    let freezeTimeout = null;
+    let animationInterval = null;
+    let currentTimeSlot = null;
+
+    // DOM elements
+    const mainResultNumber = document.querySelector('.main-result-number');
+    const mainResultTime = document.querySelector('.main-result-time');
+    const numberDisplays = document.querySelectorAll('.number-display');
+    const timeLabels = document.querySelectorAll('.time-label');
+
+    // Function to generate random 2D number (00-99)
+    function generateRandomNumber() {
+        return Math.floor(Math.random() * 100).toString().padStart(2, '0');
+    }
+
+   // Function to animate the main result number every 5 seconds
+function animateResultNumber() {
+    if (isAnimating) return;
+
+    isAnimating = true;
+    const animationDuration = 5000; // 5 seconds
+    const interval = 100; // Update every 100ms
+    
+    let count = 0;
+    const changeInterval = 5000; // 5 seconds interval to change the number
+    
+    animationInterval = setInterval(() => {
+        count += interval;
+        mainResultNumber.textContent = generateRandomNumber();
+
+        // After 5 seconds, stop the animation and freeze
+        if (count >= animationDuration) {
+            clearInterval(animationInterval);
+            isAnimating = false;
+        }
+    }, changeInterval);
+}
+
+    // Function to freeze the result for a specific time slot
+    function freezeResult(timeSlot) {
+        clearInterval(animationInterval);
+        isAnimating = false;
+        
+        // Get the predefined result or generate a random one if not set
+        const result = predefinedResults[timeSlot] || generateRandomNumber();
+        currentResult = result.toString().padStart(2, '0');
+        
+        // Update the main display
+        mainResultNumber.textContent = currentResult;
+        
+        // Update the corresponding time slot display
+        updateTimeSlotDisplay(timeSlot, currentResult);
+        
+        // Freeze until 1 minute past the hour
+        const freezeUntil = new Date();
+        const [hours, period] = timeSlot.split(' ');
+        let freezeHours = parseInt(hours);
+        
+        if (period === 'PM' && freezeHours !== 12) {
+            freezeHours += 12;
+        } else if (period === 'AM' && freezeHours === 12) {
+            freezeHours = 0;
+        }
+        
+        freezeUntil.setHours(freezeHours, 1, 0, 0);
+        
+        // If we're already past the freeze time (e.g., page loaded late)
+        if (freezeUntil < new Date()) {
+            freezeUntil.setDate(freezeUntil.getDate() + 1);
+        }
+        
+        // Set timeout to resume normal operation after freeze period
+        clearTimeout(freezeTimeout);
+        freezeTimeout = setTimeout(() => {
+            currentResult = null;
+            currentTimeSlot = null;
+        }, freezeUntil - new Date());
+    }
+
+    // Function to update the display for a specific time slot
+    function updateTimeSlotDisplay(timeSlot, result) {
+        timeLabels.forEach((label, index) => {
+            if (label.textContent === timeSlot) {
+                numberDisplays[index].textContent = result;
+            }
+        });
+    }
+
+    // Function to check current time and trigger appropriate actions
+    function checkTimeAndUpdate() {
+        const now = new Date();
+        const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
+        const hours = myanmarTime.getHours();
+        const minutes = myanmarTime.getMinutes();
+        const seconds = myanmarTime.getSeconds();
+        
+        // Format current time for comparison
+        const currentHour12 = hours % 12 || 12;
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const currentTimeSlot = `${currentHour12}:00 ${period}`;
+        
+        // Check if we're in the freeze window (40 seconds before the hour)
+        const timeSlots = Object.keys(predefinedResults);
+        const currentSlotIndex = timeSlots.indexOf(currentTimeSlot);
+        
+        if (currentSlotIndex !== -1 && minutes === 59 && seconds >= 40) {
+            // Freeze period - ensure result is frozen
+            if (!currentResult || currentTimeSlot !== timeSlots[currentSlotIndex]) {
+                freezeResult(timeSlots[currentSlotIndex]);
+            }
+        } else if (hours >= 9 && hours < 21) { // 9AM to 9PM
+            // During lottery hours but not in freeze period
+            if (!currentResult && !isAnimating) {
+                animateResultNumber();
+            }
+        } else {
+            // Outside lottery hours
+            clearInterval(animationInterval);
+            isAnimating = false;
+            mainResultNumber.textContent = '--';
+        }
+        
+        // Update all time slot displays
+        updateAllDisplays();
+    }
+
+    // Function to update all time slot displays based on current time
+    function updateAllDisplays() {
+        const now = new Date();
+        const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
+        const currentHour = myanmarTime.getHours();
+        
+        timeLabels.forEach((label, index) => {
+            const timeSlot = label.textContent;
+            const [hours, period] = timeSlot.split(' ');
+            let slotHour = parseInt(hours);
+            
+            if (period === 'PM' && slotHour !== 12) {
+                slotHour += 12;
+            } else if (period === 'AM' && slotHour === 12) {
+                slotHour = 0;
+            }
+            
+            // If this time slot has passed, show the result, otherwise show --
+            if (currentHour > slotHour || 
+                (currentHour === slotHour && myanmarTime.getMinutes() >= 1)) {
+                // Show the result (either predefined or -- if not available)
+                numberDisplays[index].textContent = predefinedResults[timeSlot]?.toString().padStart(2, '0') || '--';
+            } else {
+                // Future time slot, show --
+                numberDisplays[index].textContent = '--';
+            }
+        });
+    }
+
+    // Initialize
+    function init() {
+        // Set up time check every second
+        setInterval(checkTimeAndUpdate, 1000);
+        
+        // Initial check
+        checkTimeAndUpdate();
+        updateAllDisplays();
+    }
+
+    // Start the application
+    init();
+
+   function updateCurrentTime() {
+    const now = new Date();
+
+    // Set Myanmar Time Zone offset (GMT+6:30)
+    const options = {
+        timeZone: 'Asia/Yangon',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+    };
+
+    const timeString = now.toLocaleTimeString('en-US', options);
+    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' });
+
+    // Combine time and day (display only once)
+    const formattedTime = `${timeString} (${dayName})`;
+
+    // Update the main-result-time element
+    document.querySelector('.main-result-time').textContent = formattedTime;
+}
+
+// Call the function to update the time immediately
+updateCurrentTime();
+
+// Update the time every second to keep it current
+setInterval(updateCurrentTime, 1000);
+</script>
+    <script>
+        // Back button functionality  
+        function result() {  
+            window.location.href = 'History.html';
+        }
+    </script>
+    
+    <!-- Font Awesome for icons (optional) -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</body>
+</html>
