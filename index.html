@@ -576,42 +576,35 @@ function animateResultNumber() {
 
     // Function to check current time and trigger appropriate actions
     function checkTimeAndUpdate() {
-        const now = new Date();
-        const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
-        const hours = myanmarTime.getHours();
-        const minutes = myanmarTime.getMinutes();
-        const seconds = myanmarTime.getSeconds();
-        
-        // Format current time for comparison
-        const currentHour12 = hours % 12 || 12;
-        const period = hours >= 12 ? 'PM' : 'AM';
-        const currentTimeSlot = `${currentHour12}:00 ${period}`;
-        
-        // Check if we're in the freeze window (40 seconds before the hour)
-        const timeSlots = Object.keys(predefinedResults);
-        const currentSlotIndex = timeSlots.indexOf(currentTimeSlot);
-        
-        if (currentSlotIndex !== -1 && minutes === 59 && seconds >= 40) {
-            // Freeze period - ensure result is frozen
-            if (!currentResult || currentTimeSlot !== timeSlots[currentSlotIndex]) {
-                freezeResult(timeSlots[currentSlotIndex]);
-            }
-        } else if (hours >= 9 && hours < 21) { // 9AM to 9PM
-            // During lottery hours but not in freeze period
-            if (!currentResult && !isAnimating) {
-                animateResultNumber();
-            }
-        } else {
-            // Outside lottery hours
-            clearInterval(animationInterval);
-            isAnimating = false;
-            mainResultNumber.textContent = '--';
+    const now = new Date();
+    const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
+    const hours = myanmarTime.getHours();
+    const minutes = myanmarTime.getMinutes();
+    const seconds = myanmarTime.getSeconds();
+
+    const currentHour12 = hours % 12 || 12;
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const currentTimeSlot = `${currentHour12}:00 ${period}`;
+
+    const timeSlots = Object.keys(predefinedResults);
+    const currentSlotIndex = timeSlots.indexOf(currentTimeSlot);
+
+    // ✅ NEW: freeze result at exact 9:00:00 AM or 1:00:00 PM or 3:00:00 PM etc.
+    if (currentSlotIndex !== -1 && minutes === 0 && seconds === 0) {
+        freezeResult(timeSlots[currentSlotIndex]);
+    }
+    else if (hours >= 9 && hours < 21) {
+        if (!currentResult && !isAnimating) {
+            animateResultNumber();
         }
-        
-        // Update all time slot displays
-        updateAllDisplays();
+    } else {
+        clearInterval(animationInterval);
+        isAnimating = false;
+        mainResultNumber.textContent = '--';
     }
 
+    updateAllDisplays();
+    }
     // Function to update all time slot displays based on current time
     function updateAllDisplays() {
         const now = new Date();
