@@ -571,64 +571,73 @@ function animateResultNumber() {
     }
 
     // Function to check current time and trigger appropriate actions
-    function checkTimeAndUpdate() {
+function checkTimeAndUpdate() {
     const now = new Date();
     const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
     const hours = myanmarTime.getHours();
     const minutes = myanmarTime.getMinutes();
     const seconds = myanmarTime.getSeconds();
-
+    
+    // Format current time for comparison
     const currentHour12 = hours % 12 || 12;
     const period = hours >= 12 ? 'PM' : 'AM';
     const currentTimeSlot = `${currentHour12}:00 ${period}`;
-
+    
+    // Check if we're in the result time (exactly at the hour)
     const timeSlots = Object.keys(predefinedResults);
     const currentSlotIndex = timeSlots.indexOf(currentTimeSlot);
-
-    // ✅ NEW: freeze result at exact 9:00:00 AM or 1:00:00 PM or 3:00:00 PM etc.
+    
     if (currentSlotIndex !== -1 && minutes === 0 && seconds === 0) {
+        // Exactly at the hour - freeze the result immediately
         freezeResult(timeSlots[currentSlotIndex]);
-    }
-    else if (hours >= 9 && hours < 21) {
+    } else if (hours >= 9 && hours < 21) { // 9AM to 9PM
+        // During lottery hours but not at result time
         if (!currentResult && !isAnimating) {
             animateResultNumber();
         }
     } else {
+        // Outside lottery hours
         clearInterval(animationInterval);
         isAnimating = false;
         mainResultNumber.textContent = '--';
     }
-
+    
+    // Update all time slot displays
     updateAllDisplays();
-    }
-    // Function to update all time slot displays based on current time
-    function updateAllDisplays() {
-        const now = new Date();
-        const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
-        const currentHour = myanmarTime.getHours();
+}
+
+// Function to update all time slot displays based on current time
+function updateAllDisplays() {
+    const now = new Date();
+    const myanmarTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Yangon' }));
+    const currentHour = myanmarTime.getHours();
+    const currentMinutes = myanmarTime.getMinutes();
+    
+    timeLabels.forEach((label, index) => {
+        const timeSlot = label.textContent;
+        const [hours, period] = timeSlot.split(' ');
+        let slotHour = parseInt(hours);
         
-        timeLabels.forEach((label, index) => {
-            const timeSlot = label.textContent;
-            const [hours, period] = timeSlot.split(' ');
-            let slotHour = parseInt(hours);
-            
-            if (period === 'PM' && slotHour !== 12) {
-                slotHour += 12;
-            } else if (period === 'AM' && slotHour === 12) {
-                slotHour = 0;
-            }
-            
-            // If this time slot has passed, show the result, otherwise show --
-            if (currentHour > slotHour || 
-                (currentHour === slotHour && myanmarTime.getMinutes() >= 1)) {
-                // Show the result (either predefined or -- if not available)
-                numberDisplays[index].textContent = predefinedResults[timeSlot]?.toString().padStart(2, '0') || '--';
-            } else {
-                // Future time slot, show --
-                numberDisplays[index].textContent = '--';
-            }
-        });
-    }
+        if (period === 'PM' && slotHour !== 12) {
+            slotHour += 12;
+        } else if (period === 'AM' && slotHour === 12) {
+            slotHour = 0;
+        }
+        
+        // If current time is exactly at the hour for this time slot, show the result
+        if (currentHour === slotHour && currentMinutes === 0) {
+            numberDisplays[index].textContent = predefinedResults[timeSlot]?.toString().padStart(2, '0') || '--';
+        }
+        // If this time slot has passed (even just 1 minute past), show the result
+        else if (currentHour > slotHour || 
+                (currentHour === slotHour && currentMinutes >= 0)) {
+            numberDisplays[index].textContent = predefinedResults[timeSlot]?.toString().padStart(2, '0') || '--';
+        } else {
+            // Future time slot, show --
+            numberDisplays[index].textContent = '--';
+        }
+    });
+}
 
     // Initialize
     function init() {
