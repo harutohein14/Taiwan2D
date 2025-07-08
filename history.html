@@ -496,16 +496,7 @@ body {
         
     </div>
     
-document.addEventListener('keydown', function (event) {
-  if (
-    event.key === "F12" ||
-    (event.ctrlKey && event.shiftKey && event.key === "I") ||
-    (event.ctrlKey && event.shiftKey && event.key === "J") ||
-    (event.ctrlKey && event.key === "U")
-  ) {
-    event.preventDefault();
-  }
-});
+
     
     
     <script>
@@ -531,6 +522,16 @@ document.addEventListener('keydown', function (event) {
             const y = e.clientY / window.innerHeight;
             document.querySelector('.constellation').style.transform = `translate(-${x * 10}px, -${y * 10}px)`;
         });
+        document.addEventListener('keydown', function (event) {
+  if (
+    event.key === "F12" ||
+    (event.ctrlKey && event.shiftKey && event.key === "I") ||
+    (event.ctrlKey && event.shiftKey && event.key === "J") ||
+    (event.ctrlKey && event.key === "U")
+  ) {
+    event.preventDefault();
+  }
+});
     </script>
 </body>
 </html>
