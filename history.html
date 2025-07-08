@@ -6,6 +6,12 @@
     <title>Taiwan inline 2D History</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+    
+body {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
          
         body {
             background: #0a0e17;
@@ -259,6 +265,8 @@
     </style>
 </head>
 <body>
+
+    oncontextmenu="return false;"
     <!-- Constellation Background -->
     <div class="constellation"></div>
     
@@ -487,6 +495,18 @@
         </div>
         
     </div>
+    
+document.addEventListener('keydown', function (event) {
+  if (
+    event.key === "F12" ||
+    (event.ctrlKey && event.shiftKey && event.key === "I") ||
+    (event.ctrlKey && event.shiftKey && event.key === "J") ||
+    (event.ctrlKey && event.key === "U")
+  ) {
+    event.preventDefault();
+  }
+});
+    
     
     <script>
         // Back button functionality
