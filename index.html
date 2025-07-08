@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taiwan online 2D</title></title>
     <style>
+        
+body {
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
     
     body {
       position: relative;
@@ -365,6 +372,7 @@
     </style>
 </head>
 <body>
+    <body oncontextmenu="return false;">
     <!-- Constellation Background -->
 
     <!-- App Container -->
@@ -679,6 +687,18 @@ updateCurrentTime();
 
 // Update the time every second to keep it current
 setInterval(updateCurrentTime, 1000);
+        
+document.addEventListener('keydown', function (event) {
+  if (
+    event.key === "F12" ||
+    (event.ctrlKey && event.shiftKey && event.key === "I") ||
+    (event.ctrlKey && event.shiftKey && event.key === "J") ||
+    (event.ctrlKey && event.key === "U")
+  ) {
+    event.preventDefault();
+  }
+});
+  
 </script>
     
         
