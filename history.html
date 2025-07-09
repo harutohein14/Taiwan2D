@@ -537,7 +537,11 @@ body {
         
     </div>
     
-
+<script>
+  setTimeout(() => {
+    location.href = location.href.split('?')[0] + '?update=' + new Date().getTime();
+  }, 60000); // 60 seconds နောက် refresh
+</script>
     
     
     <script>
