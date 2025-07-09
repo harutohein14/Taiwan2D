@@ -701,28 +701,7 @@ document.addEventListener('keydown', function (event) {
 });
   
 </script>
-    <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-  }
-    </script>
-            <script>
-  setTimeout(() => {
-    location.href = location.href.split('?')[0] + '?update=' + new Date().getTime();
-  }, 60000); // 60 seconds နောက် refresh
-</script>
-            <script>
-function openTelegram() {
-    // Try to open Telegram app
-    window.location = 'tg://resolve?domain=hein2425';
-
-    // If app မရှိဘူးဆို, fallback to browser after 300ms
-    setTimeout(function() {
-        window.location = 'https://t.me/hein2425';
-    }, 300);
-}
-            </script>
-        
+    
         
     <script>    
 
