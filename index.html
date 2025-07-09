@@ -438,9 +438,8 @@ body {
         <!-- Tabs Section - Improved -->
         <div class="tabs-section">
             <div class="tabs-container">
-            <a href="#" onclick="window.location.href='https://t.me/hein2425';" class="tab active">
-    Contact
-            </a>
+                <a href="#" onclick="openTelegram()" class="tab active">Contact</a>
+
                 <a href="history.html" class="tab active" target="_blank">
                     History 
                 </a>
@@ -711,6 +710,17 @@ document.addEventListener('keydown', function (event) {
     location.href = location.href.split('?')[0] + '?update=' + new Date().getTime();
   }, 60000); // 60 seconds နောက် refresh
 </script>
+            <script>
+function openTelegram() {
+    // Try to open Telegram app
+    window.location = 'tg://resolve?domain=hein2425';
+
+    // If app မရှိဘူးဆို, fallback to browser after 300ms
+    setTimeout(function() {
+        window.location = 'https://t.me/hein2425';
+    }, 300);
+}
+            </script>
         
         
     <script>    
